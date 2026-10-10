@@ -1,0 +1,32 @@
+# Simulation outputs
+*.vcd
+*.fst
+obj_dir/
+waveform/
+
+# Vivado generated files
+.Xil/
+*.cache/
+*.gen/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/
+*.jou
+*.log
+*.str
+*.dcp
+*.bit
+
+# Local build and editor files
+build/
+reports/
+__pycache__/
+*.pyc
+*.zip
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+

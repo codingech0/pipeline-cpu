@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="6000" height="3400" viewBox="0 0 6000 3400">
+<defs>
+  <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="7" stdDeviation="8" flood-opacity="0.12"/></filter>
+  <marker id="arrow-334155" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,10 L12,5 z" fill="#334155"/></marker>
+<marker id="arrow-2563eb" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,10 L12,5 z" fill="#2563eb"/></marker>
+<marker id="arrow-7c3aed" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,10 L12,5 z" fill="#7c3aed"/></marker>
+<marker id="arrow-16a34a" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,10 L12,5 z" fill="#16a34a"/></marker>
+<marker id="arrow-dc2626" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,10 L12,5 z" fill="#dc2626"/></marker>
+<marker id="arrow-ea580c" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,10 L12,5 z" fill="#ea580c"/></marker>
+<marker id="arrow-0891b2" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,10 L12,5 z" fill="#0891b2"/></marker>
+  <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC","Arial",sans-serif}</style>
+</defs>
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="3000" y="72" font-size="44" font-weight="850" fill="#0f172a" text-anchor="middle">RV32IM 五级流水线 CPU 完整数据通路（依据最终 AXITrace 45/45 RTL）</text>
+<text x="3000" y="115" font-size="24" font-weight="600" fill="#475569" text-anchor="middle">主数据通路：蓝色　控制：紫色　前递：绿色　暂停/冲刷：红色　存储接口：橙色</text>
+<rect x="70" y="135" width="900" height="105" rx="16" fill="#e0f2fe" stroke="#94a3b8" stroke-width="2"/>
+<text x="520" y="180" font-size="34" font-weight="800" fill="#0f172a" text-anchor="middle">IF 取指级</text>
+<text x="520" y="218" font-size="23" font-weight="550" fill="#475569" text-anchor="middle">请求/响应缓冲，PC 顺序更新或重定向</text>
+<rect x="1080" y="135" width="1030" height="105" rx="16" fill="#ede9fe" stroke="#94a3b8" stroke-width="2"/>
+<text x="1595" y="180" font-size="34" font-weight="800" fill="#0f172a" text-anchor="middle">ID 译码级</text>
+<text x="1595" y="218" font-size="23" font-weight="550" fill="#475569" text-anchor="middle">译码、立即数扩展、寄存器读取与 WB→ID 旁路</text>
+<rect x="2220" y="135" width="1120" height="105" rx="16" fill="#dcfce7" stroke="#94a3b8" stroke-width="2"/>
+<text x="2780" y="180" font-size="34" font-weight="800" fill="#0f172a" text-anchor="middle">EX 执行级</text>
+<text x="2780" y="218" font-size="23" font-weight="550" fill="#475569" text-anchor="middle">前递选择、ALU/乘除、分支跳转判定</text>
+<rect x="3450" y="135" width="1240" height="105" rx="16" fill="#ffedd5" stroke="#94a3b8" stroke-width="2"/>
+<text x="4070" y="180" font-size="34" font-weight="800" fill="#0f172a" text-anchor="middle">MEM 访存级</text>
+<text x="4070" y="218" font-size="23" font-weight="550" fill="#475569" text-anchor="middle">请求对齐、DCache 访问、装载扩展与等待</text>
+<rect x="4800" y="135" width="1080" height="105" rx="16" fill="#fef3c7" stroke="#94a3b8" stroke-width="2"/>
+<text x="5340" y="180" font-size="34" font-weight="800" fill="#0f172a" text-anchor="middle">WB 写回级</text>
+<text x="5340" y="218" font-size="23" font-weight="550" fill="#475569" text-anchor="middle">选择 ALU/Load/PC+4/Imm 并写寄存器堆</text>
+<rect x="950" y="300" width="135" height="1160" rx="14" fill="#fff7ed" stroke="#ea580c" stroke-width="5"/>
+<text x="1017.5" y="344" font-size="29" font-weight="800" fill="#c2410c" text-anchor="middle">IF/ID</text>
+<path d="M 964 360 L 1071 360" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="967" y="393" font-size="18" font-weight="600" fill="#7c2d12" text-anchor="start">
+<tspan x="967" dy="0">in  if_valid [1]</tspan>
+<tspan x="967" dy="25">in  if_pc [31:0]</tspan>
+<tspan x="967" dy="25">in  if_inst [31:0]</tspan>
+<tspan x="967" dy="25">out id_pc [31:0]</tspan>
+<tspan x="967" dy="25">out id_inst [31:0]</tspan>
+<tspan x="967" dy="25"></tspan>
+<tspan x="967" dy="25">stall=front_hold [1]</tspan>
+<tspan x="967" dy="25">flush=ex_flush [1]</tspan>
+</text>
+<rect x="2100" y="300" width="135" height="1510" rx="14" fill="#fff7ed" stroke="#ea580c" stroke-width="5"/>
+<text x="2167.5" y="344" font-size="29" font-weight="800" fill="#c2410c" text-anchor="middle">ID/EX</text>
+<path d="M 2114 360 L 2221 360" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="2117" y="393" font-size="18" font-weight="600" fill="#7c2d12" text-anchor="start">
+<tspan x="2117" dy="0">pc,rs1/rs2_data,imm [31:0]</tspan>
+<tspan x="2117" dy="25">rs1,rs2,rd [4:0]</tspan>
+<tspan x="2117" dy="25">alu_op [4:0]</tspan>
+<tspan x="2117" dy="25">alua/alub_sel [1]</tspan>
+<tspan x="2117" dy="25">ram_rop [2:0]</tspan>
+<tspan x="2117" dy="25">ram_wop [3:0]</tspan>
+<tspan x="2117" dy="25">rf_we [1], rf_wsel [1:0]</tspan>
+<tspan x="2117" dy="25">is_mul_div,is_ld_st [1]</tspan>
+<tspan x="2117" dy="25">npc_op [1:0]</tspan>
+<tspan x="2117" dy="25"></tspan>
+<tspan x="2117" dy="25">stall=mem_wait|ex_mul_wait</tspan>
+<tspan x="2117" dy="25">flush=ex_flush|load_use_stall</tspan>
+</text>
+<rect x="3330" y="300" width="135" height="1470" rx="14" fill="#fff7ed" stroke="#ea580c" stroke-width="5"/>
+<text x="3397.5" y="344" font-size="29" font-weight="800" fill="#c2410c" text-anchor="middle">EX/MEM</text>
+<path d="M 3344 360 L 3451 360" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="3347" y="393" font-size="18" font-weight="600" fill="#7c2d12" text-anchor="start">
+<tspan x="3347" dy="0">alu_result [31:0]</tspan>
+<tspan x="3347" dy="25">rs2_data [31:0]</tspan>
+<tspan x="3347" dy="25">pc [31:0], imm [31:0]</tspan>
+<tspan x="3347" dy="25">rd [4:0]</tspan>
+<tspan x="3347" dy="25">ram_rop [2:0]</tspan>
+<tspan x="3347" dy="25">ram_wop [3:0]</tspan>
+<tspan x="3347" dy="25">rf_we [1], rf_wsel [1:0]</tspan>
+<tspan x="3347" dy="25">is_mul_div,is_ld_st [1]</tspan>
+<tspan x="3347" dy="25"></tspan>
+<tspan x="3347" dy="25">stall=mem_wait [1]</tspan>
+<tspan x="3347" dy="25">flush=ex_mul_wait [1]</tspan>
+</text>
+<rect x="4670" y="300" width="135" height="1320" rx="14" fill="#fff7ed" stroke="#ea580c" stroke-width="5"/>
+<text x="4737.5" y="344" font-size="29" font-weight="800" fill="#c2410c" text-anchor="middle">MEM/WB</text>
+<path d="M 4684 360 L 4791 360" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="4687" y="393" font-size="18" font-weight="600" fill="#7c2d12" text-anchor="start">
+<tspan x="4687" dy="0">alu_result [31:0]</tspan>
+<tspan x="4687" dy="25">load_data [31:0]</tspan>
+<tspan x="4687" dy="25">pc [31:0], imm [31:0]</tspan>
+<tspan x="4687" dy="25">rd [4:0]</tspan>
+<tspan x="4687" dy="25">rf_we [1], rf_wsel [1:0]</tspan>
+<tspan x="4687" dy="25">is_mul_div,is_ld_st [1]</tspan>
+<tspan x="4687" dy="25"></tspan>
+<tspan x="4687" dy="25">stall=0</tspan>
+<tspan x="4687" dy="25">flush=mem_wait [1]</tspan>
+</text>
+<rect x="90" y="320" width="390" height="250" rx="22" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="285" y="365" font-size="30" font-weight="750" fill="#0284c7" text-anchor="middle">Fetch 状态/PC寄存器</text>
+<path d="M 110 382 L 460 382" fill="none" stroke="#0284c7" stroke-width="2"  />
+<text x="114" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="114" dy="0">fetch_pc [31:0]</tspan>
+<tspan x="114" dy="31">fetch_pending(_pc) [1]/[31:0]</tspan>
+<tspan x="114" dy="31">fetch_buf_valid [1]</tspan>
+<tspan x="114" dy="31">fetch_buf_pc/inst [31:0]</tspan>
+</text>
+<rect x="560" y="320" width="320" height="250" rx="22" fill="#fff7ed" stroke="#ea580c" stroke-width="4"/>
+<text x="720" y="365" font-size="30" font-weight="750" fill="#ea580c" text-anchor="middle">ICache 接口</text>
+<path d="M 580 382 L 860 382" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="584" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="584" dy="0">ifetch_req [1]</tspan>
+<tspan x="584" dy="31">ifetch_addr [31:0]</tspan>
+<tspan x="584" dy="31">ifetch_ready/valid [1]</tspan>
+<tspan x="584" dy="31">ifetch_inst [31:0]</tspan>
+</text>
+<path d="M 480 415 L 560 415" fill="none" stroke="#ea580c" stroke-width="4"  marker-end="url(#arrow-ea580c)"/>
+<rect x="382.5" y="384" width="275" height="31" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="520" y="402" font-size="18" font-weight="600" fill="#ea580c" text-anchor="middle">ifetch_req[1], addr[31:0]</text>
+<path d="M 560 505 L 480 505" fill="none" stroke="#ea580c" stroke-width="4"  marker-end="url(#arrow-ea580c)"/>
+<rect x="377.28" y="474" width="285.44" height="31" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="520" y="492" font-size="18" font-weight="600" fill="#ea580c" text-anchor="middle">ready/valid[1], inst[31:0]</text>
+<path d="M 480 620 L 925 620" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="565.11" y="586" width="269.78" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="700" y="607" font-size="21" font-weight="600" fill="#2563eb" text-anchor="middle">fetch_to_id_pc [31:0]</text>
+<path d="M 480 680 L 925 680" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="552.9300000000001" y="646" width="294.14" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="700" y="667" font-size="21" font-weight="600" fill="#2563eb" text-anchor="middle">fetch_to_id_inst [31:0]</text>
+<path d="M 480 740 L 925 740" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#arrow-2563eb)"/>
+<rect x="565.11" y="706" width="269.78" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="700" y="727" font-size="21" font-weight="600" fill="#2563eb" text-anchor="middle">fetch_to_id_valid [1]</text>
+<rect x="1120" y="320" width="360" height="250" rx="22" fill="#f3e8ff" stroke="#7c3aed" stroke-width="4"/>
+<text x="1300" y="365" font-size="30" font-weight="750" fill="#7c3aed" text-anchor="middle">Controller</text>
+<path d="M 1140 382 L 1460 382" fill="none" stroke="#7c3aed" stroke-width="2"  />
+<text x="1144" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="1144" dy="0">opcode[6:0],funct3[2:0],funct7[6:0]</tspan>
+<tspan x="1144" dy="31">→ npc_op[1:0], sext_op[2:0]</tspan>
+<tspan x="1144" dy="31">→ alu_op[4:0], alua/alub_sel[1]</tspan>
+<tspan x="1144" dy="31">→ ram_rop[2:0],ram_wop[3:0]</tspan>
+<tspan x="1144" dy="31">→ rf_we[1],rf_wsel[1:0]</tspan>
+</text>
+<rect x="1510" y="320" width="260" height="210" rx="22" fill="#f3e8ff" stroke="#7c3aed" stroke-width="4"/>
+<text x="1640" y="365" font-size="30" font-weight="750" fill="#7c3aed" text-anchor="middle">SEXT</text>
+<path d="M 1530 382 L 1750 382" fill="none" stroke="#7c3aed" stroke-width="2"  />
+<text x="1534" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="1534" dy="0">op [2:0]</tspan>
+<tspan x="1534" dy="31">imm=id_inst[31:7] [24:0]</tspan>
+<tspan x="1534" dy="31">imm_ext=id_imm [31:0]</tspan>
+</text>
+<rect x="1120" y="690" width="470" height="310" rx="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="4"/>
+<text x="1355" y="735" font-size="30" font-weight="750" fill="#7c3aed" text-anchor="middle">RF 32×32</text>
+<path d="M 1140 752 L 1570 752" fill="none" stroke="#7c3aed" stroke-width="2"  />
+<text x="1144" y="790" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="1144" dy="0">rR1=id_rs1 [4:0] → rD1 [31:0]</tspan>
+<tspan x="1144" dy="31">rR2=id_rs2 [4:0] → rD2 [31:0]</tspan>
+<tspan x="1144" dy="31">we=wb_rf_we [1]</tspan>
+<tspan x="1144" dy="31">wR=wb_rd [4:0]</tspan>
+<tspan x="1144" dy="31">wD=wb_rf_wdata [31:0]</tspan>
+<tspan x="1144" dy="31">x0 恒为 0</tspan>
+</text>
+<rect x="1640" y="690" width="400" height="310" rx="22" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="1840" y="735" font-size="30" font-weight="750" fill="#16a34a" text-anchor="middle">WB→ID 旁路 MUX</text>
+<path d="M 1660 752 L 2020 752" fill="none" stroke="#16a34a" stroke-width="2"  />
+<text x="1664" y="790" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="1664" dy="0">rf_rs1/rs2_data [31:0]</tspan>
+<tspan x="1664" dy="31">wb_rd [4:0], wb_rf_we [1]</tspan>
+<tspan x="1664" dy="31">wb_rf_wdata [31:0]</tspan>
+<tspan x="1664" dy="31">→ id_rs1/rs2_data [31:0]</tspan>
+</text>
+<path d="M 1085 430 L 1120 430" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#arrow-2563eb)"/>
+<rect x="1088" y="397" width="142.17999999999998" height="30" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1095" y="414" font-size="17" font-weight="600" fill="#2563eb" text-anchor="start">id_inst[31:0]</text>
+<path d="M 1085 575 L 2075 575" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="1499.92" y="540" width="160.16" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1580" y="561" font-size="21" font-weight="600" fill="#2563eb" text-anchor="middle">id_pc [31:0]</text>
+<path d="M 1085 635 L 2075 635" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="1359.85" y="600" width="440.29999999999995" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1580" y="621" font-size="21" font-weight="600" fill="#2563eb" text-anchor="middle">id_inst → rs1[4:0],rs2[4:0],rd[4:0]</text>
+<path d="M 1480 465 L 1510 465" fill="none" stroke="#7c3aed" stroke-width="4"  marker-end="url(#arrow-7c3aed)"/>
+<rect x="1432.32" y="432" width="125.35999999999999" height="29" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1495" y="448" font-size="16" font-weight="600" fill="#7c3aed" text-anchor="middle">sext_op[2:0]</text>
+<path d="M 1770 465 L 2075 465" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="1828.83" y="430" width="172.33999999999997" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1915" y="451" font-size="21" font-weight="600" fill="#2563eb" text-anchor="middle">id_imm [31:0]</text>
+<path d="M 1590 800 L 1640 800" fill="none" stroke="#2563eb" stroke-width="4"  marker-end="url(#arrow-2563eb)"/>
+<rect x="1547.68" y="769" width="134.64" height="29" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1615" y="785" font-size="16" font-weight="600" fill="#2563eb" text-anchor="middle">rD1/rD2[31:0]</text>
+<path d="M 2040 875 L 2075 875" fill="none" stroke="#16a34a" stroke-width="5"  marker-end="url(#arrow-16a34a)"/>
+<rect x="2041" y="842" width="190.32" height="29" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="2048" y="858" font-size="16" font-weight="600" fill="#16a34a" text-anchor="end">id_rs1/2_data[31:0]</text>
+<path d="M  1480 540 L 2000 540 L 2000 1040 L 2075 1040" fill="none" stroke="#7c3aed" stroke-width="4"  marker-end="url(#arrow-7c3aed)"/>
+<rect x="1550" y="506" width="420" height="33" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1760" y="526" font-size="20" font-weight="600" fill="#7c3aed" text-anchor="middle">ID 控制束：alu/npc/ram/rf/is_*（1~5 bit）</text>
+<rect x="2270" y="320" width="410" height="300" rx="22" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="2475" y="365" font-size="30" font-weight="750" fill="#16a34a" text-anchor="middle">Forwarding</text>
+<path d="M 2290 382 L 2660 382" fill="none" stroke="#16a34a" stroke-width="2"  />
+<text x="2294" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="2294" dy="0">ex_rs1/ex_rs2 [4:0]</tspan>
+<tspan x="2294" dy="31">mem_rd/wb_rd [4:0]</tspan>
+<tspan x="2294" dy="31">mem_rf_we/wb_rf_we [1]</tspan>
+<tspan x="2294" dy="31">→ forward_a/forward_b [1:0]</tspan>
+<tspan x="2294" dy="31">10: MEM→EX；01: WB→EX</tspan>
+</text>
+<rect x="2730" y="320" width="280" height="260" rx="22" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="2870" y="365" font-size="30" font-weight="750" fill="#16a34a" text-anchor="middle">Operand MUX</text>
+<path d="M 2750 382 L 2990 382" fill="none" stroke="#16a34a" stroke-width="2"  />
+<text x="2754" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="2754" dy="0">forwarded_a/b [31:0]</tspan>
+<tspan x="2754" dy="31">alu_a=PC 或 forwarded_a</tspan>
+<tspan x="2754" dy="31">alu_b=imm 或 forwarded_b</tspan>
+<tspan x="2754" dy="31">→ alu_a/alu_b [31:0]</tspan>
+</text>
+<rect x="3050" y="320" width="250" height="260" rx="22" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="3175" y="365" font-size="30" font-weight="750" fill="#16a34a" text-anchor="middle">ALU / RV32M</text>
+<path d="M 3070 382 L 3280 382" fill="none" stroke="#16a34a" stroke-width="2"  />
+<text x="3074" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="3074" dy="0">op [4:0], a/b [31:0]</tspan>
+<tspan x="3074" dy="31">→ alu_c [31:0]</tspan>
+<tspan x="3074" dy="31">→ alu_branch [1]</tspan>
+<tspan x="3074" dy="31">→ mul_div_busy [1]</tspan>
+</text>
+<rect x="2270" y="720" width="560" height="260" rx="22" fill="#fee2e2" stroke="#dc2626" stroke-width="4"/>
+<text x="2550" y="765" font-size="30" font-weight="750" fill="#dc2626" text-anchor="middle">分支/跳转重定向</text>
+<path d="M 2290 782 L 2810 782" fill="none" stroke="#dc2626" stroke-width="2"  />
+<text x="2294" y="820" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="2294" dy="0">ex_npc_op [1:0], alu_branch [1]</tspan>
+<tspan x="2294" dy="31">JALR: (forwarded_a+ex_imm)&amp;~1</tspan>
+<tspan x="2294" dy="31">其他: ex_pc+ex_imm</tspan>
+<tspan x="2294" dy="31">→ redirect_target [31:0], ex_flush [1]</tspan>
+</text>
+<path d="M 2235 690 L 2730 690" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="2223.6" y="656" width="512.8" height="33" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="2480" y="676" font-size="20" font-weight="600" fill="#2563eb" text-anchor="middle">ex_pc/ex_imm/ex_rs1_data/ex_rs2_data [31:0]</text>
+<path d="M 2680 470 L 2730 470" fill="none" stroke="#16a34a" stroke-width="5"  marker-end="url(#arrow-16a34a)"/>
+<rect x="2614.48" y="439" width="181.04" height="29" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="2705" y="455" font-size="16" font-weight="600" fill="#16a34a" text-anchor="middle">forward_[a/b][1:0]</text>
+<path d="M 3010 470 L 3050 470" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="2962.68" y="439" width="134.64" height="29" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3030" y="455" font-size="16" font-weight="600" fill="#2563eb" text-anchor="middle">alu_a/b[31:0]</text>
+<path d="M 3300 430 L 3305 430" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="3283" y="398" width="122.46" height="30" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3290" y="415" font-size="17" font-weight="600" fill="#2563eb" text-anchor="end">alu_c[31:0]</text>
+<path d="M  3300 510 L 3315 510 L 3315 785 L 2830 785" fill="none" stroke="#dc2626" stroke-width="4"  marker-end="url(#arrow-dc2626)"/>
+<rect x="2995.14" y="752" width="149.72" height="31" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3070" y="770" font-size="18" font-weight="600" fill="#dc2626" text-anchor="middle">alu_branch[1]</text>
+<path d="M  2270 870 L 760 870 L 760 260 L 90 260 L 90 320" fill="none" stroke="#dc2626" stroke-width="5" stroke-dasharray="12 9" marker-end="url(#arrow-dc2626)"/>
+<rect x="359.78000000000003" y="829" width="720.4399999999999" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="720" y="850" font-size="21" font-weight="600" fill="#dc2626" text-anchor="middle">redirect_target[31:0] / ex_flush[1] → IF；flush IF/ID、ID/EX</text>
+<rect x="3510" y="320" width="360" height="290" rx="22" fill="#ffedd5" stroke="#ea580c" stroke-width="4"/>
+<text x="3690" y="365" font-size="30" font-weight="750" fill="#ea580c" text-anchor="middle">MREQ</text>
+<path d="M 3530 382 L 3850 382" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="3534" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="3534" dy="0">ram_addr=mem_alu_result [31:0]</tspan>
+<tspan x="3534" dy="31">ram_rop [2:0],ram_wop [3:0]</tspan>
+<tspan x="3534" dy="31">ram_wdata=mem_rs2_data [31:0]</tspan>
+<tspan x="3534" dy="31">→ mem_da_ren/wen [3:0]</tspan>
+<tspan x="3534" dy="31">→ mem_da_addr/wdata [31:0]</tspan>
+</text>
+<rect x="3920" y="320" width="430" height="310" rx="22" fill="#fff7ed" stroke="#ea580c" stroke-width="4"/>
+<text x="4135" y="365" font-size="30" font-weight="750" fill="#ea580c" text-anchor="middle">DCache 接口</text>
+<path d="M 3940 382 L 4330 382" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="3944" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="3944" dy="0">daccess_ren/wen [3:0]</tspan>
+<tspan x="3944" dy="31">daccess_addr/wdata [31:0]</tspan>
+<tspan x="3944" dy="31">daccess_rvalid/wresp [1]</tspan>
+<tspan x="3944" dy="31">daccess_rdata [31:0]</tspan>
+<tspan x="3944" dy="31">未响应：mem_wait=1，保持流水线</tspan>
+</text>
+<rect x="4400" y="320" width="230" height="260" rx="22" fill="#ffedd5" stroke="#ea580c" stroke-width="4"/>
+<text x="4515" y="365" font-size="30" font-weight="750" fill="#ea580c" text-anchor="middle">MEXT</text>
+<path d="M 4420 382 L 4610 382" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="4424" y="420" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="4424" dy="0">op [2:0]</tspan>
+<tspan x="4424" dy="31">din [31:0]</tspan>
+<tspan x="4424" dy="31">byte_offs [1:0]</tspan>
+<tspan x="4424" dy="31">→ mem_load_data [31:0]</tspan>
+</text>
+<rect x="3510" y="760" width="510" height="300" rx="22" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="3765" y="805" font-size="30" font-weight="750" fill="#16a34a" text-anchor="middle">MEM 前递值 MUX</text>
+<path d="M 3530 822 L 4000 822" fill="none" stroke="#16a34a" stroke-width="2"  />
+<text x="3534" y="860" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="3534" dy="0">WB_ALU: mem_alu_result [31:0]</tspan>
+<tspan x="3534" dy="31">WB_RAM: mem_load_data [31:0]</tspan>
+<tspan x="3534" dy="31">WB_PC4: mem_pc+4 [31:0]</tspan>
+<tspan x="3534" dy="31">WB_EXT: mem_imm [31:0]</tspan>
+<tspan x="3534" dy="31">→ mem_forward_data [31:0]</tspan>
+</text>
+<path d="M 3465 470 L 3510 470" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="3438" y="438" width="94" height="30" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3485" y="455" font-size="17" font-weight="600" fill="#2563eb" text-anchor="middle">mem_*</text>
+<path d="M 3870 500 L 3920 500" fill="none" stroke="#ea580c" stroke-width="5"  marker-end="url(#arrow-ea580c)"/>
+<rect x="3848" y="468" width="94" height="30" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3895" y="485" font-size="17" font-weight="600" fill="#ea580c" text-anchor="middle">请求</text>
+<path d="M 4350 550 L 4400 550" fill="none" stroke="#ea580c" stroke-width="5"  marker-end="url(#arrow-ea580c)"/>
+<rect x="4313.77" y="518" width="122.46" height="30" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="4375" y="535" font-size="17" font-weight="600" fill="#ea580c" text-anchor="middle">rdata[31:0]</text>
+<path d="M 4630 500 L 4645 500" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="4613" y="469" width="153.2" height="29" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="4620" y="485" font-size="16" font-weight="600" fill="#2563eb" text-anchor="end">load_data[31:0]</text>
+<path d="M  3765 760 L 3765 660 L 4645 660" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="3910.9700000000003" y="627" width="598.06" height="32" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="4210" y="646" font-size="19" font-weight="600" fill="#2563eb" text-anchor="middle">mem_alu_result/load_data/pc/imm [31:0], rd[4:0], rf_*</text>
+<rect x="4870" y="350" width="520" height="340" rx="22" fill="#fef3c7" stroke="#ca8a04" stroke-width="4"/>
+<text x="5130" y="395" font-size="30" font-weight="750" fill="#ca8a04" text-anchor="middle">Writeback MUX</text>
+<path d="M 4890 412 L 5370 412" fill="none" stroke="#ca8a04" stroke-width="2"  />
+<text x="4894" y="450" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="4894" dy="0">wb_rf_wsel [1:0]</tspan>
+<tspan x="4894" dy="31">WB_ALU: wb_alu_result [31:0]</tspan>
+<tspan x="4894" dy="31">WB_RAM: wb_load_data [31:0]</tspan>
+<tspan x="4894" dy="31">WB_PC4: wb_pc+4 [31:0]</tspan>
+<tspan x="4894" dy="31">WB_EXT: wb_imm [31:0]</tspan>
+<tspan x="4894" dy="31">→ wb_rf_wdata [31:0]</tspan>
+</text>
+<rect x="5450" y="350" width="350" height="260" rx="22" fill="#fef3c7" stroke="#ca8a04" stroke-width="4"/>
+<text x="5625" y="395" font-size="30" font-weight="750" fill="#ca8a04" text-anchor="middle">RF 写端口</text>
+<path d="M 5470 412 L 5780 412" fill="none" stroke="#ca8a04" stroke-width="2"  />
+<text x="5474" y="450" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="5474" dy="0">we=wb_rf_we [1]</tspan>
+<tspan x="5474" dy="31">wR=wb_rd [4:0]</tspan>
+<tspan x="5474" dy="31">wD=wb_rf_wdata [31:0]</tspan>
+<tspan x="5474" dy="31">→ ID 级 RF</tspan>
+</text>
+<path d="M 4805 530 L 4870 530" fill="none" stroke="#2563eb" stroke-width="5"  marker-end="url(#arrow-2563eb)"/>
+<rect x="4788" y="498" width="94" height="30" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="4835" y="515" font-size="17" font-weight="600" fill="#2563eb" text-anchor="middle">wb_*</text>
+<path d="M 5390 515 L 5450 515" fill="none" stroke="#ca8a04" stroke-width="5"  marker-end="url(#arrow-ca8a04)"/>
+<rect x="5373" y="483" width="94" height="30" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="5420" y="500" font-size="17" font-weight="600" fill="#ca8a04" text-anchor="middle">wD[31:0]</text>
+<path d="M  5625 610 L 5625 1180 L 1340 1180 L 1340 1000" fill="none" stroke="#ca8a04" stroke-width="5"  marker-end="url(#arrow-ca8a04)"/>
+<rect x="3140.68" y="1145" width="598.64" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3440" y="1166" font-size="21" font-weight="600" fill="#ca8a04" text-anchor="middle">WB→RF：wb_rf_we[1], wb_rd[4:0], wb_rf_wdata[31:0]</text>
+<path d="M  5260 690 L 5260 1260 L 1820 1260 L 1820 1000" fill="none" stroke="#16a34a" stroke-width="5"  marker-end="url(#arrow-16a34a)"/>
+<rect x="3180.23" y="1225" width="659.54" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3510" y="1246" font-size="21" font-weight="600" fill="#16a34a" text-anchor="middle">WB→ID 同拍旁路：wb_rd[4:0], wb_rf_we[1], wb_rf_wdata[31:0]</text>
+<path d="M  5260 1260 L 5260 1390 L 2470 1390 L 2470 620" fill="none" stroke="#16a34a" stroke-width="5"  marker-end="url(#arrow-16a34a)"/>
+<rect x="3532.41" y="1355" width="635.18" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3850" y="1376" font-size="21" font-weight="600" fill="#16a34a" text-anchor="middle">WB→EX 前递：wb_rd[4:0], wb_rf_we[1], wb_rf_wdata[31:0]</text>
+<path d="M  3765 1060 L 3765 1480 L 2540 1480 L 2540 620" fill="none" stroke="#16a34a" stroke-width="5"  marker-end="url(#arrow-16a34a)"/>
+<rect x="2793.69" y="1445" width="732.62" height="34" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3160" y="1466" font-size="21" font-weight="600" fill="#16a34a" text-anchor="middle">MEM→EX 前递：mem_rd[4:0], mem_rf_we[1], mem_forward_data[31:0]</text>
+<rect x="720" y="1910" width="1140" height="380" rx="22" fill="#fee2e2" stroke="#dc2626" stroke-width="4"/>
+<text x="1290" y="1955" font-size="30" font-weight="750" fill="#dc2626" text-anchor="middle">流水线控制 / Hazard</text>
+<path d="M 740 1972 L 1840 1972" fill="none" stroke="#dc2626" stroke-width="2"  />
+<text x="744" y="2010" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="744" dy="0">load_use_stall = EX为load且 ex_rd==id_rs1/id_rs2</tspan>
+<tspan x="744" dy="31">mem_wait = mem_is_ld_st &amp;&amp; !mem_done</tspan>
+<tspan x="744" dy="31">ex_mul_wait = ex_is_mul_div &amp;&amp; mul_div_busy</tspan>
+<tspan x="744" dy="31">front_hold = load_use_stall | mem_wait | ex_mul_wait</tspan>
+<tspan x="744" dy="31">ex_flush = 分支成立/跳转，且 MEM/乘除未等待</tspan>
+</text>
+<path d="M  1290 1910 L 1290 1650 L 1015 1650 L 1015 1460" fill="none" stroke="#dc2626" stroke-width="5"  marker-end="url(#arrow-dc2626)"/>
+<rect x="916.8" y="1616" width="466.4" height="33" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1150" y="1636" font-size="20" font-weight="600" fill="#dc2626" text-anchor="middle">IF/ID: stall=front_hold, flush=ex_flush</text>
+<path d="M  1450 1910 L 1450 1740 L 2165 1740 L 2165 1810" fill="none" stroke="#dc2626" stroke-width="5"  marker-end="url(#arrow-dc2626)"/>
+<rect x="1437.6" y="1706" width="744.8" height="33" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="1810" y="1726" font-size="20" font-weight="600" fill="#dc2626" text-anchor="middle">ID/EX: stall=mem_wait|ex_mul_wait；flush=ex_flush|load_use_stall</text>
+<path d="M  1570 1910 L 1570 1830 L 3395 1830 L 3395 1770" fill="none" stroke="#dc2626" stroke-width="5"  marker-end="url(#arrow-dc2626)"/>
+<rect x="2261" y="1796" width="477.99999999999994" height="33" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="2500" y="1816" font-size="20" font-weight="600" fill="#dc2626" text-anchor="middle">EX/MEM: stall=mem_wait；flush=ex_mul_wait</text>
+<path d="M  1700 1910 L 1700 1875 L 4735 1875 L 4735 1620" fill="none" stroke="#dc2626" stroke-width="5"  marker-end="url(#arrow-dc2626)"/>
+<rect x="3165.4" y="1841" width="269.2" height="33" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3300" y="1861" font-size="20" font-weight="600" fill="#dc2626" text-anchor="middle">MEM/WB: flush=mem_wait</text>
+<rect x="1980" y="2010" width="3920" height="520" rx="28" fill="#fff7ed" stroke="#ea580c" stroke-width="4"/>
+<text x="3940" y="2060" font-size="32" font-weight="800" fill="#c2410c" text-anchor="middle">CPU 顶层存储系统（cpu_top）</text>
+<rect x="2050" y="2110" width="760" height="310" rx="22" fill="#fff7ed" stroke="#ea580c" stroke-width="4"/>
+<text x="2430" y="2155" font-size="30" font-weight="750" fill="#ea580c" text-anchor="middle">ICache</text>
+<path d="M 2070 2172 L 2790 2172" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="2074" y="2210" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="2074" dy="0">CPU侧: inst_rreq[1],inst_addr[31:0]</tspan>
+<tspan x="2074" dy="31">inst_ready/valid[1],inst_out[31:0]</tspan>
+<tspan x="2074" dy="31">总线侧: cpu_ren[3:0],cpu_raddr[31:0]</tspan>
+<tspan x="2074" dy="31">dev_rrdy/rvalid[1],dev_rdata[127:0]</tspan>
+</text>
+<rect x="2910" y="2110" width="820" height="310" rx="22" fill="#fff7ed" stroke="#ea580c" stroke-width="4"/>
+<text x="3320" y="2155" font-size="30" font-weight="750" fill="#ea580c" text-anchor="middle">DCache</text>
+<path d="M 2930 2172 L 3710 2172" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="2934" y="2210" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="2934" dy="0">CPU侧: data_ren/wen[3:0],data_addr[31:0]</tspan>
+<tspan x="2934" dy="31">data_wdata/rdata[31:0],valid/wresp[1]</tspan>
+<tspan x="2934" dy="31">总线读: cpu_ren[3:0],cpu_raddr[31:0]</tspan>
+<tspan x="2934" dy="31">总线写: cpu_wen[3:0],cpu_waddr/wdata[31:0]</tspan>
+<tspan x="2934" dy="31">返回: dev_rrdy/rvalid/wrdy[1],rdata[127:0]</tspan>
+</text>
+<rect x="3830" y="2110" width="1980" height="310" rx="22" fill="#fff7ed" stroke="#ea580c" stroke-width="4"/>
+<text x="4820" y="2155" font-size="30" font-weight="750" fill="#ea580c" text-anchor="middle">AXI Master → 外部存储器</text>
+<path d="M 3850 2172 L 5790 2172" fill="none" stroke="#ea580c" stroke-width="2"  />
+<text x="3854" y="2210" font-size="22" font-weight="500" fill="#334155" text-anchor="start">
+<tspan x="3854" dy="0">AW: awaddr[31:0],awlen[7:0],awsize[2:0],awburst[1:0],awvalid/ready[1]</tspan>
+<tspan x="3854" dy="31">W: wdata[31:0],wstrb[3:0],wlast/wvalid/wready[1]；B: bresp[1:0],bvalid/bready[1]</tspan>
+<tspan x="3854" dy="31">AR: araddr[31:0],arlen[7:0],arsize[2:0],arburst[1:0],arvalid/ready[1]</tspan>
+<tspan x="3854" dy="31">R: rdata[31:0],rresp[1:0],rlast/rvalid/rready[1]；Cache line refill=128 bit</tspan>
+</text>
+<path d="M 2810 2265 L 2910 2265" fill="none" stroke="#ea580c" stroke-width="4"  marker-end="url(#arrow-ea580c)"/>
+<rect x="2806.02" y="2232" width="107.96" height="31" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="2860" y="2250" font-size="18" font-weight="600" fill="#ea580c" text-anchor="middle">独立 I/D 路径</text>
+<path d="M 3730 2265 L 3830 2265" fill="none" stroke="#ea580c" stroke-width="4"  marker-end="url(#arrow-ea580c)"/>
+<rect x="3720.8" y="2232" width="118.39999999999999" height="31" rx="5" fill="#ffffffcc" stroke="none" stroke-width="0"/>
+<text x="3780" y="2250" font-size="18" font-weight="600" fill="#ea580c" text-anchor="middle">Cache请求/响应</text>
+<rect x="70" y="2640" width="5760" height="650" rx="24" fill="#ffffff" stroke="#94a3b8" stroke-width="3"/>
+<text x="2950" y="2690" font-size="32" font-weight="800" fill="#0f172a" text-anchor="middle">段间寄存器接口信号汇总（名称与位宽均对应 RTL）</text>
+<text x="120" y="2750" font-size="27" font-weight="800" fill="#334155" text-anchor="start">IF/ID</text>
+<text x="120" y="2790" font-size="20" font-weight="550" fill="#475569" text-anchor="start">
+<tspan x="120" dy="0">if_valid [1]</tspan>
+<tspan x="120" dy="32">if_pc [31:0]</tspan>
+<tspan x="120" dy="32">if_inst [31:0]</tspan>
+<tspan x="120" dy="32">→ id_pc [31:0]</tspan>
+<tspan x="120" dy="32">→ id_inst [31:0]</tspan>
+<tspan x="120" dy="32">clk,rst,stall,flush [1]</tspan>
+</text>
+<text x="1050" y="2750" font-size="27" font-weight="800" fill="#334155" text-anchor="start">ID/EX 数据</text>
+<text x="1050" y="2790" font-size="20" font-weight="550" fill="#475569" text-anchor="start">
+<tspan x="1050" dy="0">id/ex_pc [31:0]</tspan>
+<tspan x="1050" dy="32">id/ex_rs1_data [31:0]</tspan>
+<tspan x="1050" dy="32">id/ex_rs2_data [31:0]</tspan>
+<tspan x="1050" dy="32">id/ex_imm [31:0]</tspan>
+<tspan x="1050" dy="32">id/ex_rs1,rs2,rd [4:0]</tspan>
+<tspan x="1050" dy="32">clk,rst,stall,flush [1]</tspan>
+</text>
+<text x="2050" y="2750" font-size="27" font-weight="800" fill="#334155" text-anchor="start">ID/EX 控制</text>
+<text x="2050" y="2790" font-size="20" font-weight="550" fill="#475569" text-anchor="start">
+<tspan x="2050" dy="0">id/ex_alu_op [4:0]</tspan>
+<tspan x="2050" dy="32">id/ex_alua_sel [1]</tspan>
+<tspan x="2050" dy="32">id/ex_alub_sel [1]</tspan>
+<tspan x="2050" dy="32">id/ex_ram_rop [2:0]</tspan>
+<tspan x="2050" dy="32">id/ex_ram_wop [3:0]</tspan>
+<tspan x="2050" dy="32">id/ex_rf_we [1],rf_wsel [1:0]</tspan>
+<tspan x="2050" dy="32">id/ex_is_mul_div,is_ld_st [1]</tspan>
+<tspan x="2050" dy="32">id/ex_npc_op [1:0]</tspan>
+</text>
+<text x="3220" y="2750" font-size="27" font-weight="800" fill="#334155" text-anchor="start">EX/MEM</text>
+<text x="3220" y="2790" font-size="20" font-weight="550" fill="#475569" text-anchor="start">
+<tspan x="3220" dy="0">ex_alu_result→mem_alu_result [31:0]</tspan>
+<tspan x="3220" dy="32">ex_rs2_data→mem_rs2_data [31:0]</tspan>
+<tspan x="3220" dy="32">ex_pc/imm→mem_pc/imm [31:0]</tspan>
+<tspan x="3220" dy="32">ex_rd→mem_rd [4:0]</tspan>
+<tspan x="3220" dy="32">ex/mem_ram_rop [2:0]</tspan>
+<tspan x="3220" dy="32">ex/mem_ram_wop [3:0]</tspan>
+<tspan x="3220" dy="32">ex/mem_rf_we [1],rf_wsel [1:0]</tspan>
+<tspan x="3220" dy="32">ex/mem_is_mul_div,is_ld_st [1]</tspan>
+</text>
+<text x="4510" y="2750" font-size="27" font-weight="800" fill="#334155" text-anchor="start">MEM/WB</text>
+<text x="4510" y="2790" font-size="20" font-weight="550" fill="#475569" text-anchor="start">
+<tspan x="4510" dy="0">mem/wb_alu_result [31:0]</tspan>
+<tspan x="4510" dy="32">mem/wb_load_data [31:0]</tspan>
+<tspan x="4510" dy="32">mem/wb_pc,imm [31:0]</tspan>
+<tspan x="4510" dy="32">mem/wb_rd [4:0]</tspan>
+<tspan x="4510" dy="32">mem/wb_rf_we [1]</tspan>
+<tspan x="4510" dy="32">mem/wb_rf_wsel [1:0]</tspan>
+<tspan x="4510" dy="32">mem/wb_is_mul_div,is_ld_st [1]</tspan>
+<tspan x="4510" dy="32">clk,rst,stall,flush [1]</tspan>
+</text>
+<text x="80" y="3360" font-size="22" font-weight="550" fill="#64748b" text-anchor="start">注：图中的“控制束”不是新增模块，而是对应 ID/EX、EX/MEM、MEM/WB 中随指令同步传递的控制字段；未画模块内部组合逻辑。</text>
+</svg>
